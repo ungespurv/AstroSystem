@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo -s
+
 apt update -y && apt upgrade -y
 apt install snapd -y
 apt install wget -y
@@ -26,7 +26,7 @@ dpkg -i phoebe_1.0.1_amd64.deb
 apt -f install
 
 # Download ds9
-wget https://ds9.si.edu/download/ubuntu18/ds9.8.3.2.tar.gz
+wget https://ds9.si.edu/download/ubuntu20/ds9.ubuntu20.8.4.1.tar.gz
 
 # Extract ds9
 tar -xzf ds9.8.3.2.tar.gz
