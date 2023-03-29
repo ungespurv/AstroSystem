@@ -25,24 +25,18 @@ dpkg -i phoebe_1.0.1_amd64.deb
 # Install dependencies
 apt -f install
 
-# Download DS9 source code
-wget https://github.com/SAOImageDS9/SAOImageDS9/archive/master.tar.gz -O ds9.tar.gz
+# Download ds9
+wget https://ds9.si.edu/download/ubuntu18/ds9.8.3.2.tar.gz
 
-# Extract the archive
-tar -xzf ds9.tar.gz
+# Extract ds9
+tar -xzf ds9.8.3.2.tar.gz
 
-# Enter the directory
-cd SAOImageDS9-master
+# Move ds9 to /opt
+sudo mv ds9 /opt/
 
-# Compile and install DS9
-./configure
-make
-make install
+# Create symlink for ds9
+sudo ln -s /opt/ds9/ds9 /usr/local/bin/ds9
 
-# Clean up
-cd ..
-rm ds9.tar.gz
-rm -rf SAOImageDS9-master
 
 # Download Starlink
 wget https://ftp.eao.hawaii.edu/starlink/2021A/REV1/starlink-2021A-Ubuntu-REV1.tar.gz
