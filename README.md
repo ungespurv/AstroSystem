@@ -2,12 +2,13 @@
 Kolejna edycja AstroSystemu stworzonego w IOA.
 
 Aby uruchomić skrypt, nalezy:
-- wpisać w terminalu '''bash install_packages.sh'''
+- wpisać w terminalu ```bash install_packages.sh```
 lub
 - wpisać
- '''chmod +x install_packages.sh
- ./install_packages.sh'''
-
+```
+chmod +x install_packages.sh
+ ./install_packages.sh
+```
 
 
 # Zainstalowane oprogramowanie
