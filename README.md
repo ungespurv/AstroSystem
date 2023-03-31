@@ -1,4 +1,26 @@
 # AstroSystem
 Kolejna edycja AstroSystemu stworzonego w IOA.
 
-Po odpaleniu skryptu w bashu zainstalują się odpowienie programy. Dokumantacja będzie zrobiona koszernie.
+Aby uruchomić skrypt, nalezy:
+- wpisać w terminalu '''bash install_packages.sh'''
+lub
+- wpisać
+ '''chmod +x install_packages.sh
+ ./install_packages.sh'''
+
+
+
+# Zainstalowane oprogramowanie
+
+Ten projekt zawiera skrypt bash, który instaluje następujące oprogramowanie na komputerze z systemem Linux Ubuntu:
+
+- Python 3
+- Odtwarzacz multimedialny VLC
+- Edytor nano
+- VSCodium
+- Stellarium
+- Phoebe (v1.0.1)
+- ds9
+- Starlink (v2021A-REV1)
+- XEphem (v4.1.0)
+- IRAF (v2.17)

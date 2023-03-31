@@ -1,55 +1,116 @@
 #!/bin/bash
 
-# Install Python 3, VLC media player, nano editor, and VSCodium
-sudo apt-get update -y
-sudo apt install wget -y
-sudo apt-get -y install python3 vlc nano
+apt update -y && apt upgrade -y
+apt install snapd -y
+apt install wget -y
+apt install python3 -y
+apt install vlc -y
+apt install mc -y
+apt install nano -y
 pip3 install numpy matplotlib astropy 
-wget -qO - https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg | sudo apt-key add -
-echo 'deb https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/debs/ vscodium main' | sudo tee /etc/apt/sources.list.d/vscodium.list
-sudo apt-get update -y
-sudo apt-get -y install codium
-sudo apt install build-essential groff-base libmotif-dev libnext-dev libxmu-dev libxt-dev libsll-dev -y
-sudo apt install gcc make flex -y
-sudo apt install libcurl4-openssl-dev libexpat-dev libreadline-dev -y
+snap install stellarium-daily
+snap install codium --classic
 
-# Install Stellarium
-sudo add-apt-repository -y ppa:stellarium/stellarium-releases
-sudo apt-get update -y
-sudo apt-get -y install stellarium
+apt install build-essential groff-base libmotif-dev libnext-dev libxext-dev libxmu-dev libxt-dev libsll-dev libx11-dev libxft-dev libpng-dev libjpeg-dev libtiff-dev zlib1g-dev -y
+apt install gcc make flex fortran libncurses-dev -y
+apt install libcurl4-openssl-dev libexpat-dev libreadline-dev -y
+
+
+# Download Phoebe
+wget https://github.com/phoebe-project/phoebe2-ui/releases/download/1.0.1/phoebe_1.0.1_amd64.deb
 
 # Install Phoebe
-wget https://github.com/phoebe-project/phoebe2-ui/releases/download/1.0.1/phoebe_1.0.1_amd64.deb
-sudo dpkg -i phoebe_1.0.1_amd64.deb
-sudo apt-get -y install -f
+dpkg -i phoebe_1.0.1_amd64.deb
 
-# Install Carta
-sudo snap install carta
+# Install dependencies
+apt -f install
+
+# Download ds9
+wget https://ds9.si.edu/download/ubuntu20/ds9.ubuntu20.8.4.1.tar.gz
+
+# Extract ds9
+tar -xzf ds9.ubuntu20.8.4.1.tar.gz
+rm ds9.ubuntu20.8.4.1.tar.gz
+
+# Move ds9 to /opt
+sudo mv ds9 /opt/
+
+# Create symlink for ds9
+sudo ln -s /opt/ds9/ds9 /usr/local/bin/ds9
+
+
+
+# Download Starlink
+wget https://ftp.eao.hawaii.edu/starlink/2021A/REV1/starlink-2021A-Ubuntu-REV1.tar.gz
+
+# Extract the archive
+tar -xzf starlink-2021A-Ubuntu-REV1.tar.gz
+
+# Enter the directory
+cd starlink-2021A-Ubuntu-REV1
 
 # Install Starlink
-wget https://ftp.eao.hawaii.edu/starlink/2021A/REV1/starlink-2021A-Ubuntu-REV1.tar.gz
-tar -xzvf starlink-2021A-Ubuntu-REV1.tar.gz
-cd starlink-2021A-Ubuntu-REV1
-./configure --prefix=/usr/local/starlink
-make
-sudo make install
-cd ..
+./install
 
-# Install XEphem
-wget https://github.com/XEphem/XEphem/archive/refs/tags/4.1.0.tar.gz
-tar -xzvf 4.1.0.tar.gz
-cd XEphem-4.1.0
+# Clean up
+cd ..
+rm starlink-2021A-Ubuntu-REV1.tar.gz
+rm -rf starlink-2021A-Ubuntu-REV1
+
+
+# Download XEphem
+wget http://www.clearskyinstitute.com/xephem/xephem-3.7.7.tar.gz
+
+# Extract the files
+tar xvzf xephem-3.7.7.tar.gz
+
+# Change directory to the extracted folder
+cd xephem-3.7.7
+
+# Configure and build the software
 ./configure
 make
-sudo make install
-cd ..
 
-# Install IRAF
-sudo apt-get -y install build-essential xorg-dev libbz2-dev libpng-dev libx11-dev libxpm-dev libncurses5-dev
-wget https://github.com/iraf-community/iraf/archive/refs/tags/v2.17.tar.gz
-tar -xzvf v2.17.tar.gz
-cd iraf-2.17/unix
-./install
-cd ../..
+# Install the software
+sudo make install
+
+# Clean up the downloaded files
+cd ..
+rm -rf xephem-3.7.7
+rm xephem-3.7.7.tar.gz
+
+# Add XEphem to the PATH environment variable
+echo 'export PATH=/usr/local/xephem:$PATH' >> ~/.bashrc
+source ~/.bashrc
+
+echo "XEphem installation complete!"
+
+
+# Download IRAF source code
+wget https://github.com/iraf-community/iraf/archive/refs/tags/v2.17.tar.gz -O iraf.tar.gz
+
+# Extract the archive
+tar -xzf iraf.tar.gz
+
+# Enter the directory
+cd iraf-2.17
+
+# Configure IRAF
+./configure
+
+# Compile and install IRAF
+make
+sudo make install
+
+# Set IRAF environment variables
+echo "export IRAFARCH=linux" >> ~/.bashrc
+echo "export iraf=$HOME/iraf" >> ~/.bashrc
+echo "source $iraf/unix/hlib/irafuser.csh" >> ~/.cshrc
+
+# Clean up
+cd ..
+rm iraf.tar.gz
+rm -rf iraf-2.17
 
 sudo apt update -y & sudo apt upgrade -y & sudo apt autoremove -y
+echo "Koniec instalacji!"
