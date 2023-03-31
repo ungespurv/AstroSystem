@@ -48,6 +48,7 @@ wget https://ftp.eao.hawaii.edu/starlink/2021A/REV1/starlink-2021A-Ubuntu-REV1.t
 tar -xzf starlink-2021A-Ubuntu-REV1.tar.gz
 
 # Enter the directory
+mv starlink-2021A-Ubuntu-REV1 /opt
 cd starlink-2021A-Ubuntu-REV1
 
 # Install Starlink
@@ -57,6 +58,7 @@ cd starlink-2021A-Ubuntu-REV1
 cd ..
 sudo rm starlink-2021A-Ubuntu-REV1.tar.gz
 sudo rm -rf starlink-2021A-Ubuntu-REV1
+echo "STARLINK_DIR=/home/$USER/opt/star"
 
 
 # Download XEphem
