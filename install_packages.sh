@@ -1,19 +1,20 @@
 #!/bin/bash
 
-apt update -y && apt upgrade -y
-apt install snapd -y
-apt install wget -y
-apt install python3 -y
-apt install vlc -y
-apt install mc -y
-apt install nano -y
+echo "Witaj w skrypcie instalacyjnym AstroSystem v2!"
+sudo apt update -y && sudo apt upgrade -y
+sudo apt install snapd -y
+sudo apt install wget -y
+sudo apt install python3 -y
+sudo apt install vlc -y
+sudo apt install mc -y
+sudo apt install nano -y
 pip3 install numpy matplotlib astropy 
 snap install stellarium-daily
 snap install codium --classic
 
-apt install build-essential groff-base libmotif-dev libnext-dev libxext-dev libxmu-dev libxt-dev libsll-dev libx11-dev libxft-dev libpng-dev libjpeg-dev libtiff-dev zlib1g-dev -y
-apt install gcc make flex fortran libncurses-dev -y
-apt install libcurl4-openssl-dev libexpat-dev libreadline-dev -y
+sudo apt install build-essential groff-base libmotif-dev libnext-dev libxext-dev libxmu-dev libxt-dev libsll-dev libx11-dev libxft-dev libpng-dev libjpeg-dev libtiff-dev zlib1g-dev -y
+sudo apt install gcc make flex fortran libncurses-dev -y
+sudo apt install libcurl4-openssl-dev libexpat-dev libreadline-dev -y
 
 
 # Download Phoebe
@@ -23,14 +24,14 @@ wget https://github.com/phoebe-project/phoebe2-ui/releases/download/1.0.1/phoebe
 dpkg -i phoebe_1.0.1_amd64.deb
 
 # Install dependencies
-apt -f install
+sudo apt -f install
 
 # Download ds9
 wget https://ds9.si.edu/download/ubuntu20/ds9.ubuntu20.8.4.1.tar.gz
 
 # Extract ds9
 tar -xzf ds9.ubuntu20.8.4.1.tar.gz
-rm ds9.ubuntu20.8.4.1.tar.gz
+sudo rm ds9.ubuntu20.8.4.1.tar.gz
 
 # Move ds9 to /opt
 sudo mv ds9 /opt/
@@ -54,8 +55,8 @@ cd starlink-2021A-Ubuntu-REV1
 
 # Clean up
 cd ..
-rm starlink-2021A-Ubuntu-REV1.tar.gz
-rm -rf starlink-2021A-Ubuntu-REV1
+sudo rm starlink-2021A-Ubuntu-REV1.tar.gz
+sudo rm -rf starlink-2021A-Ubuntu-REV1
 
 
 # Download XEphem
@@ -76,8 +77,8 @@ sudo make install
 
 # Clean up the downloaded files
 cd ..
-rm -rf xephem-3.7.7
-rm xephem-3.7.7.tar.gz
+sudo rm -rf xephem-3.7.7
+sudo rm xephem-3.7.7.tar.gz
 
 # Add XEphem to the PATH environment variable
 echo 'export PATH=/usr/local/xephem:$PATH' >> ~/.bashrc
@@ -109,8 +110,8 @@ echo "source $iraf/unix/hlib/irafuser.csh" >> ~/.cshrc
 
 # Clean up
 cd ..
-rm iraf.tar.gz
-rm -rf iraf-2.17
+sudo rm iraf.tar.gz
+sudo rm -rf iraf-2.17
 
 sudo apt update -y & sudo apt upgrade -y & sudo apt autoremove -y
 echo "Koniec instalacji!"
