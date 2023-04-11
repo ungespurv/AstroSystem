@@ -1,6 +1,8 @@
 #!/bin/bash
 
 echo "Witaj w skrypcie instalacyjnym AstroSystem v2!"
+mkdir astrosystem
+cd astrosystem
 sudo apt update -y && sudo apt upgrade -y
 sudo apt install snapd -y
 sudo apt install wget -y
@@ -15,10 +17,15 @@ snap install codium --classic
 sudo apt install build-essential groff-base libmotif-dev libnext-dev libxext-dev libxmu-dev libxt-dev libsll-dev libx11-dev libxft-dev libpng-dev libjpeg-dev libtiff-dev zlib1g-dev -y
 sudo apt install gcc make flex fortran libncurses-dev -y
 sudo apt install libcurl4-openssl-dev libexpat-dev libreadline-dev -y
+sudo apt install git libc6-dev flex bison libncurses5-dev libreadline-dev libssl-dev libbz2-dev libffi-dev libgdbm-dev liblzma-dev libsqlite3-dev tk-dev libxml2-dev libxmlsec1-dev libyaml-dev -y
 
 
 # Download Phoebe
-wget https://github.com/phoebe-project/phoebe2-ui/releases/download/1.0.1/phoebe_1.0.1_amd64.deb
+FILE=phoebe_1.0.1_amd64.deb
+if [ ! -f "$FILE" ]; then
+    echo "$FILE nie istnieje. Pobieram..."
+    wget https://github.com/phoebe-project/phoebe2-ui/releases/download/1.0.1/phoebe_1.0.1_amd64.deb
+fi
 
 # Install Phoebe
 dpkg -i phoebe_1.0.1_amd64.deb
@@ -27,93 +34,63 @@ dpkg -i phoebe_1.0.1_amd64.deb
 sudo apt -f install
 
 # Download ds9
-wget https://ds9.si.edu/download/ubuntu20/ds9.ubuntu20.8.4.1.tar.gz
-
-# Extract ds9
-tar -xzf ds9.ubuntu20.8.4.1.tar.gz
-sudo rm ds9.ubuntu20.8.4.1.tar.gz
-
-# Move ds9 to /opt
-sudo mv ds9 /opt/
-
-# Create symlink for ds9
-sudo ln -s /opt/ds9/ds9 /usr/local/bin/ds9
-
+git clone https://github.com/SAOImageDS9/SAOImageDS9.git
+cd SAOImageDS9
+./configure
+make
+sudo make install
 
 
 # Download Starlink
-wget https://ftp.eao.hawaii.edu/starlink/2021A/REV1/starlink-2021A-Ubuntu-REV1.tar.gz
+FILE=starlink-2021A-Ubuntu-REV1.tar.gz
+if [ ! -f "$FILE" ]; then
+    echo "$FILE nie istnieje. Pobieram..."
+    wget https://ftp.eao.hawaii.edu/starlink/2021A/REV1/starlink-2021A-Ubuntu-REV1.tar.gz
+
+fi
 
 # Extract the archive
 tar -xzf starlink-2021A-Ubuntu-REV1.tar.gz
 
-# Enter the directory
-mv starlink-2021A-Ubuntu-REV1 /opt
 cd starlink-2021A-Ubuntu-REV1
+./install.pl
+export STARLINK_DIR=/path/to/starlink
+source $STARLINK_DIR/etc/profile
 
-# Install Starlink
-./install
-
-# Clean up
-cd ..
-sudo rm starlink-2021A-Ubuntu-REV1.tar.gz
-sudo rm -rf starlink-2021A-Ubuntu-REV1
-echo "STARLINK_DIR=/home/$USER/opt/star"
 
 
 # Download XEphem
-wget http://www.clearskyinstitute.com/xephem/xephem-3.7.7.tar.gz
+FILE=xephem-4.1.0.tar.gz
+if [ ! -f "$FILE" ]; then
+    echo "$FILE nie istnieje. Pobieram..."
+    wget http://www.clearskyinstitute.com/xephem/xephem-4.1.0.tar.gz
+
+fi
 
 # Extract the files
-tar xvzf xephem-3.7.7.tar.gz
-
-# Change directory to the extracted folder
-cd xephem-3.7.7
-
-# Configure and build the software
+tar -xzf xephem-4.1.0.tar.gz
+cd xephem-4.1.0
 ./configure
 make
-
-# Install the software
 sudo make install
-
-# Clean up the downloaded files
-cd ..
-sudo rm -rf xephem-3.7.7
-sudo rm xephem-3.7.7.tar.gz
-
-# Add XEphem to the PATH environment variable
-echo 'export PATH=/usr/local/xephem:$PATH' >> ~/.bashrc
-source ~/.bashrc
+export XEphem=/usr/local/xephem
+export PATH=$XEphem:$PATH
 
 echo "XEphem installation complete!"
 
-
 # Download IRAF source code
-wget https://github.com/iraf-community/iraf/archive/refs/tags/v2.17.tar.gz -O iraf.tar.gz
+git clone https://github.com/iraf-community/iraf.git
+cd iraf
 
-# Extract the archive
-tar -xzf iraf.tar.gz
-
-# Enter the directory
-cd iraf-2.17
-
-# Configure IRAF
-./configure
-
-# Compile and install IRAF
+./configure --with-tables=$HOME/iraf/tables
+cd sys
 make
-sudo make install
-
-# Set IRAF environment variables
-echo "export IRAFARCH=linux" >> ~/.bashrc
-echo "export iraf=$HOME/iraf" >> ~/.bashrc
-echo "source $iraf/unix/hlib/irafuser.csh" >> ~/.cshrc
-
-# Clean up
-cd ..
-sudo rm iraf.tar.gz
-sudo rm -rf iraf-2.17
+make install
+echo "export IRAFARCH=linux64" >> ~/.bashrc
+echo "export IRAF=$HOME/iraf" >> ~/.bashrc
+echo "source $HOME/iraf/unix/hlib/irafuser.csh" >> ~/.cshrc
+source ~/.bashrc
 
 sudo apt update -y & sudo apt upgrade -y & sudo apt autoremove -y
 echo "Koniec instalacji!"
+source ~/.bashrc
